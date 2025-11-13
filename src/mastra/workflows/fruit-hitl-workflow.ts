@@ -79,13 +79,6 @@ export const startFruitWorkflowTool = createTool({
 		status: z.string(),
 	}),
 	execute: async ({ mastra, runtimeContext, threadId, resourceId }) => {
-		// UNDEFINED //
-		console.log(
-			'---------------------',
-			threadId,
-			resourceId,
-			'---------------------',
-		);
 		const fruitWorkflow = mastra?.getWorkflow('fruit-suggestion');
 		if (!fruitWorkflow) {
 			throw new Error('Fruit suggestion workflow not found');

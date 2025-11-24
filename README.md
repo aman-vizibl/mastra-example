@@ -1,9 +1,21 @@
 PROBLEM:
 
-### Message duplication
+### Event propogation issue with nested workflow when resumed
 
-In the agent tool `delegate-to-fruit-agent` where we wrap the fruit agent with shared memory from supervisor agent, having access to the same thread results in sub agent writing messages to the thread resulting in duplicated messages within the thread.
+Context: `data-` custom events are essential for `ai-sdk` tool part consumption for rendering UI elements and emitting events to FE for actions.
 
-### Sub agent calls supervisor agent tool
+In the fruit suggestion workflow if we remove the `innerWorkflow` all events emitted within the workflow steps are piped through the top level chat agent stream when the workflow is stared & resumed.
 
-Although hard to reproduce in this particular case, in case of more complex workflows the sub agent seems to call supervisor agent tool especially during HITL loops state handovers between the agents. Even though delegateToFruitAgent is only given to supervisor agent.
+However, if we add a simple workflow inside the main workflow and when control flow is resumed the no custom events are emitted. Please note that it does work when the workflow is started
+
+Steps to reproduce:
+
+- prompt `chatAgent` to suggest a fruit
+- Inspect console logs and search for `data-step-` 
+- you should be able to see workflow chunks being bubbled up to top level stream chunks marked with `DELEGATION AGENT TOOL::`
+- prompt `chatAgent` to confirm the suggested fruit
+- Inspect console logs and search for `data-step-` 
+- No logs found
+
+Expected behaviour: Any custom events written to writer within a nested workflow step should bubble up when the workflow is resumed.
+

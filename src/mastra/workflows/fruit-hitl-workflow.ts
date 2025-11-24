@@ -60,35 +60,33 @@ const refineAndConfirmFruitStep = createStep({
 	}),
 	resumeSchema: z.object({
 		approved: z.boolean().default(false),
+		suggestedFruit: z.string(), // Pass back the fruit being approved/rejected
 	}),
 	execute: async ({ inputData, resumeData, mastra, writer, ...params }) => {
+		// If resuming with approval, use the fruit from resumeData (the one user approved)
+		if (resumeData?.approved && resumeData?.suggestedFruit) {
+			await writer?.custom({
+				type: 'data-step-approved',
+				data: { fruit: resumeData.suggestedFruit, status: 'approved' },
+			});
+			return { draftFruit: resumeData.suggestedFruit, approved: true };
+		}
+
 		// Emit event: starting fruit generation
 		await writer?.custom({
 			type: 'data-step-progress',
 			data: 'generating-fruit',
 		});
 
-		// Generate fruit if not already set (first time or after rejection)
-		const currentFruit =
-			inputData?.draftFruit || FRUITS[fruitIndex % FRUITS.length]!;
-		if (!inputData?.draftFruit) {
-			fruitIndex++;
-		}
+		// Generate a new fruit
+		const currentFruit = FRUITS[fruitIndex % FRUITS.length]!;
+		fruitIndex++;
 
 		// Emit event: fruit generated
 		await writer?.custom({
 			type: 'data-step-progress',
 			data: { fruit: currentFruit, status: 'generated' },
 		});
-
-		// If approved, workflow is complete
-		if (resumeData?.approved) {
-			await writer?.custom({
-				type: 'data-step-approved',
-				data: { fruit: currentFruit, status: 'approved' },
-			});
-			return { draftFruit: currentFruit, approved: true };
-		}
 
 		// Emit event: awaiting user confirmation
 		await writer?.custom({
@@ -199,18 +197,13 @@ export const startFruitWorkflowTool = createTool({
 		});
 
 		for await (const chunk of streamOutput.fullStream) {
-			console.log('WORKFLOW CHUNK:::', chunk);
-			if (chunk.type.startsWith('data-')) {
-				await context.writer.custom(chunk);
-			}
+			await context.writer.custom(chunk);
 		}
 
 		const result = await streamOutput.result;
-		console.log('WORKFLOW RESULT:::', JSON.stringify(result, null, 2));
 
 		if (result.status === 'suspended') {
 			const suspendPayload = findSuspendPayload(result.steps);
-			console.log('SUSPEND PAYLOAD:::', suspendPayload);
 			return {
 				runId: run.runId,
 				suggestedFruit: suspendPayload?.suggestedFruit ?? '',
@@ -233,11 +226,17 @@ export const resumeFruitWorkflowTool = createTool({
 		'Resume a suspended fruit suggestion workflow with whether the user approved the fruit',
 	inputSchema: z.object({
 		runId: z.string().describe('The workflow run ID to resume'),
+		suggestedFruit: z
+			.string()
+			.describe(
+				'The fruit that was suggested and is being approved/rejected',
+			),
 		approved: z
 			.boolean()
 			.describe('Whether the user approved the suggested fruit'),
 	}),
 	outputSchema: z.object({
+		runId: z.string().optional(),
 		suggestedFruit: z.string(),
 		approved: z.boolean(),
 		status: z.string(),
@@ -247,23 +246,20 @@ export const resumeFruitWorkflowTool = createTool({
 			throw new Error('fruit agent context not found');
 		}
 
-		const { runId, approved } = inputData;
+		const { runId, approved, suggestedFruit } = inputData;
 		const fruitWorkflow = context.mastra.getWorkflow('fruit-suggestion');
 		if (!fruitWorkflow) {
 			throw new Error('Fruit suggestion workflow not found');
 		}
 		const run = await fruitWorkflow.createRun({ runId });
-		// With nested workflow, use dot notation for the step path
+		// Pass suggestedFruit back so the step knows which fruit was approved/rejected
 		const streamOutput = run.resumeStreamVNext({
-			resumeData: { approved },
+			resumeData: { approved, suggestedFruit },
 			requestContext: context.requestContext,
 		});
 
 		for await (const chunk of streamOutput.fullStream) {
-			console.log('RESUME CHUNK:::', chunk);
-			if (chunk.type.startsWith('data-')) {
-				await context.writer.custom(chunk);
-			}
+			await context.writer.custom(chunk);
 		}
 
 		const result = await streamOutput.result;
@@ -280,11 +276,11 @@ export const resumeFruitWorkflowTool = createTool({
 
 		if (result.status === 'success') {
 			const output = result.result as {
-				suggestedFruit: string;
+				draftFruit: string;
 				approved: boolean;
 			};
 			return {
-				suggestedFruit: output.suggestedFruit,
+				suggestedFruit: output.draftFruit,
 				approved: output.approved,
 				status: 'success',
 			};

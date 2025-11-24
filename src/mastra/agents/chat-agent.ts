@@ -1,7 +1,6 @@
 import { Agent } from '@mastra/core/agent';
 import { Memory } from '@mastra/memory';
 import { LibSQLStore } from '@mastra/libsql';
-import { fruitAgent } from './fruit-agent';
 import { delegateToFruitAgent } from '../tools/delegate-to-fruit-agent';
 
 export const chatAgent = new Agent({
@@ -31,6 +30,7 @@ The delegateToFruitAgent tool wraps a specialized agent that:
 	},
 	memory: new Memory({
 		storage: new LibSQLStore({
+			id: 'chat-agent-storage',
 			url: 'file:../mastra.db', // path is relative to the .mastra/output directory
 		}),
 	}),

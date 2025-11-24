@@ -1,4 +1,5 @@
-import { createStep, createTool, createWorkflow } from '@mastra/core';
+import { createTool } from '@mastra/core/tools';
+import { createStep, createWorkflow } from '@mastra/core/workflows';
 import { z } from 'zod';
 
 // List of fruits
@@ -13,10 +14,42 @@ const FRUITS = [
 ];
 let fruitIndex = 0;
 
+const findSuspendPayload = (
+	steps: Record<string, unknown>,
+):
+	| {
+			suggestedFruit: string;
+			message: string;
+	  }
+	| undefined => {
+	for (const stepResult of Object.values(steps)) {
+		if (stepResult && typeof stepResult === 'object') {
+			// Check if this step has a suspendPayload
+			if (
+				'suspendPayload' in stepResult &&
+				stepResult.suspendPayload !== undefined
+			) {
+				return stepResult.suspendPayload as {
+					suggestedFruit: string;
+					message: string;
+				};
+			}
+			// Check nested steps recursively (for nested workflows)
+			if ('steps' in stepResult && stepResult.steps) {
+				const nested = findSuspendPayload(
+					stepResult.steps as Record<string, unknown>,
+				);
+				if (nested) return nested;
+			}
+		}
+	}
+	return undefined;
+};
+
 const refineAndConfirmFruitStep = createStep({
 	id: 'confirm-and-refine',
 	inputSchema: z.object({
-		draftFruit: z.string().nullable(),
+		draftFruit: z.string().optional(),
 	}),
 	outputSchema: z.object({
 		approved: z.boolean(),
@@ -28,7 +61,13 @@ const refineAndConfirmFruitStep = createStep({
 	resumeSchema: z.object({
 		approved: z.boolean().default(false),
 	}),
-	execute: async ({ inputData, resumeData, mastra, ...params }) => {
+	execute: async ({ inputData, resumeData, mastra, writer, ...params }) => {
+		// Emit event: starting fruit generation
+		await writer?.custom({
+			type: 'data-step-progress',
+			data: 'generating-fruit',
+		});
+
 		// Generate fruit if not already set (first time or after rejection)
 		const currentFruit =
 			inputData?.draftFruit || FRUITS[fruitIndex % FRUITS.length]!;
@@ -36,10 +75,26 @@ const refineAndConfirmFruitStep = createStep({
 			fruitIndex++;
 		}
 
+		// Emit event: fruit generated
+		await writer?.custom({
+			type: 'data-step-progress',
+			data: { fruit: currentFruit, status: 'generated' },
+		});
+
 		// If approved, workflow is complete
 		if (resumeData?.approved) {
+			await writer?.custom({
+				type: 'data-step-approved',
+				data: { fruit: currentFruit, status: 'approved' },
+			});
 			return { draftFruit: currentFruit, approved: true };
 		}
+
+		// Emit event: awaiting user confirmation
+		await writer?.custom({
+			type: 'data-step-suspended',
+			data: { fruit: currentFruit, status: 'awaitng-confirmation' },
+		});
 
 		// Always suspend to get user feedback
 		await params.suspend({ suggestedFruit: currentFruit });
@@ -49,13 +104,50 @@ const refineAndConfirmFruitStep = createStep({
 	},
 });
 
-export const workflow = createWorkflow({
-	id: 'fruit-suggestion',
+// Preprocessing step to add before the inner workflow
+const preprocessStep = createStep({
+	id: 'preprocess-fruit-request',
 	inputSchema: z.object({
-		draftFruit: z.string().nullable(),
+		draftFruit: z.string().optional(),
 	}),
 	outputSchema: z.object({
-		fruit: z.string(),
+		draftFruit: z.string().optional(),
+	}),
+	execute: async ({ inputData, writer }) => {
+		await writer?.custom({
+			type: 'data-step-progress',
+			data: {
+				status: 'preprocessing',
+				message: 'Preparing fruit suggestion...',
+			},
+		});
+
+		// Simulate some preprocessing
+		await new Promise((resolve) => setTimeout(resolve, 100));
+
+		await writer?.custom({
+			type: 'data-step-progress',
+			data: {
+				status: 'preprocessed',
+				message: 'Ready to suggest fruits!',
+			},
+		});
+
+		return {
+			draftFruit: inputData?.draftFruit,
+		};
+	},
+});
+
+// Inner workflow that handles the fruit confirmation loop
+export const innerFruitWorkflow = createWorkflow({
+	id: 'inner-fruit-confirmation',
+	inputSchema: z.object({
+		draftFruit: z.string().optional(),
+	}),
+	outputSchema: z.object({
+		approved: z.boolean(),
+		draftFruit: z.string(),
 	}),
 })
 	.dountil(
@@ -65,7 +157,20 @@ export const workflow = createWorkflow({
 			return Promise.resolve(data.approved || iterationCount >= 5);
 		},
 	)
+	.commit();
 
+// Main workflow that nests the inner workflow
+export const workflow = createWorkflow({
+	id: 'fruit-suggestion',
+	inputSchema: z.object({
+		draftFruit: z.string().optional(),
+	}),
+	outputSchema: z.object({
+		fruit: z.string(),
+	}),
+})
+	.then(preprocessStep)
+	.then(innerFruitWorkflow)
 	.commit();
 
 // Tool to start the fruit suggestion workflow
@@ -78,23 +183,37 @@ export const startFruitWorkflowTool = createTool({
 		suggestedFruit: z.string(),
 		status: z.string(),
 	}),
-	execute: async ({ mastra, runtimeContext, threadId, resourceId }) => {
-		const fruitWorkflow = mastra?.getWorkflow('fruit-suggestion');
+	execute: async (inputData, context) => {
+		if (!context || !context.mastra || !context.writer) {
+			throw new Error('fruit agent context not found');
+		}
+
+		const fruitWorkflow = context.mastra.getWorkflow('fruit-suggestion');
 		if (!fruitWorkflow) {
 			throw new Error('Fruit suggestion workflow not found');
 		}
-		const run = await fruitWorkflow.createRunAsync();
-		const result = await run.start({ runtimeContext });
+		const run = await fruitWorkflow.createRun();
+		const streamOutput = run.streamVNext({
+			requestContext: context.requestContext,
+			inputData: { draftFruit: undefined },
+		});
+
+		for await (const chunk of streamOutput.fullStream) {
+			console.log('WORKFLOW CHUNK:::', chunk);
+			if (chunk.type.startsWith('data-')) {
+				await context.writer.custom(chunk);
+			}
+		}
+
+		const result = await streamOutput.result;
+		console.log('WORKFLOW RESULT:::', JSON.stringify(result, null, 2));
 
 		if (result.status === 'suspended') {
-			const suspendPayload = result.steps['confirm-and-refine']
-				?.suspendPayload as {
-				suggestedFruit: string;
-				message: string;
-			};
+			const suspendPayload = findSuspendPayload(result.steps);
+			console.log('SUSPEND PAYLOAD:::', suspendPayload);
 			return {
 				runId: run.runId,
-				suggestedFruit: suspendPayload.suggestedFruit,
+				suggestedFruit: suspendPayload?.suggestedFruit ?? '',
 				status: 'suspended',
 			};
 		}
@@ -123,28 +242,37 @@ export const resumeFruitWorkflowTool = createTool({
 		approved: z.boolean(),
 		status: z.string(),
 	}),
-	execute: async ({ context, mastra, runtimeContext }) => {
-		const { runId, approved } = context;
-		const fruitWorkflow = mastra?.getWorkflow('fruit-suggestion');
+	execute: async (inputData, context) => {
+		if (!context || !context.agent || !context.mastra || !context.writer) {
+			throw new Error('fruit agent context not found');
+		}
+
+		const { runId, approved } = inputData;
+		const fruitWorkflow = context.mastra.getWorkflow('fruit-suggestion');
 		if (!fruitWorkflow) {
 			throw new Error('Fruit suggestion workflow not found');
 		}
-		const run = await fruitWorkflow.createRunAsync({ runId });
-		const result = await run.resume({
-			step: 'confirm-and-refine',
+		const run = await fruitWorkflow.createRun({ runId });
+		// With nested workflow, use dot notation for the step path
+		const streamOutput = run.resumeStreamVNext({
 			resumeData: { approved },
-			runtimeContext,
+			requestContext: context.requestContext,
 		});
 
+		for await (const chunk of streamOutput.fullStream) {
+			console.log('RESUME CHUNK:::', chunk);
+			if (chunk.type.startsWith('data-')) {
+				await context.writer.custom(chunk);
+			}
+		}
+
+		const result = await streamOutput.result;
+
 		if (result.status === 'suspended') {
-			const suspendPayload = result.steps['confirm-and-refine']
-				?.suspendPayload as {
-				suggestedFruit: string;
-				message: string;
-			};
+			const suspendPayload = findSuspendPayload(result.steps);
 			return {
 				runId: run.runId,
-				suggestedFruit: suspendPayload.suggestedFruit,
+				suggestedFruit: suspendPayload?.suggestedFruit ?? '',
 				status: 'suspended',
 				approved: false,
 			};

@@ -10,6 +10,7 @@ const fruitAgent = new Agent({
 	name: 'Fruit Agent',
 	memory: new Memory({
 		storage: new LibSQLStore({
+			id: 'outcome-agent-storage',
 			url: 'file:../mastra.db', // path is relative to the .mastra/output directory
 		}),
 	}),

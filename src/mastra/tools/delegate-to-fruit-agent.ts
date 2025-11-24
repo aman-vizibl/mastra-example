@@ -1,4 +1,4 @@
-import { createTool } from '@mastra/core';
+import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
 
 export const delegateToFruitAgent = createTool({
@@ -24,32 +24,41 @@ export const delegateToFruitAgent = createTool({
 			.string()
 			.describe("The fruit agent's response to present to the user"),
 	}),
-	execute: async ({
-		context,
-		mastra,
-		runtimeContext,
-		threadId,
-		resourceId,
-		memory,
-	}) => {
-		const { userMessage } = context;
+	execute: async (inputData, context) => {
+		const { userMessage } = inputData;
 
-		const agent = mastra?.getAgent('fruitAgent');
-		if (!agent || !threadId || !resourceId || !memory) {
+		if (!context || !context.agent || !context.mastra || !context.writer) {
 			throw new Error('fruit agent context not found');
 		}
 
-		const result = await agent.generate(userMessage, {
-			runtimeContext,
+		const agent = context.mastra.getAgent('fruitAgent');
+
+		const subThreadId = `${context.agent.threadId}:outcome-agent-state-thread`;
+		const subResourceId = `${context.agent.resourceId}:outcome-agent`;
+
+		// Use stream() instead of generate() to capture all events including custom tool-output events
+		const streamResult = await agent.stream(userMessage, {
+			requestContext: context.requestContext,
 			memory: {
-				thread: threadId,
-				resource: resourceId,
+				thread: subThreadId,
+				resource: subResourceId,
 			},
 			maxSteps: 2,
 		});
 
+		// Forward all stream events to parent writer
+		for await (const chunk of streamResult.fullStream) {
+			console.log('DELEGATION AGENT TOOL::', chunk);
+			await context.writer.custom({
+				type: 'data-delegated-agent',
+				data: chunk,
+			});
+		}
+
+		const result = await streamResult.text;
+
 		return {
-			response: result.text,
+			response: result,
 		};
 	},
 });

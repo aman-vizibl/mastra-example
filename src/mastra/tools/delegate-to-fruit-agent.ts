@@ -1,5 +1,7 @@
 import { createTool } from '@mastra/core/tools';
 import { z } from 'zod';
+import { appendFileSync } from 'fs';
+import { join } from 'path';
 
 export const delegateToFruitAgent = createTool({
 	id: 'delegate-to-fruit-specialist',
@@ -47,8 +49,13 @@ export const delegateToFruitAgent = createTool({
 		});
 
 		// Forward all stream events to parent writer
+		// Use relative path from project root, assuming cwd is .mastra/output
+		const logFile = join('../../src', 'delegation-agent.log');
+		console.log('Log file path:', logFile);
 		for await (const chunk of streamResult.fullStream) {
-			console.log('DELEGATION AGENT TOOL::', chunk);
+			const logEntry = `[${new Date().toISOString()}] ${JSON.stringify(chunk, null, 2)}\n`;
+			console.log('Writing to log:', logFile);
+			appendFileSync(logFile, logEntry);
 			await context.writer.custom({
 				type: 'data-delegated-agent',
 				data: chunk,

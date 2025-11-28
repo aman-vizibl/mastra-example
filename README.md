@@ -14,7 +14,7 @@ Steps to reproduce:
 - Inspect console logs and search for `data-step-` 
 - you should be able to see workflow chunks being bubbled up to top level stream chunks marked with `DELEGATION AGENT TOOL::`
 - prompt `chatAgent` to confirm the suggested fruit
-- Inspect console logs and search for `data-step-` 
+- Inspect logs (./src/delegation-agent.log) and search for `data-step-approved` 
 - No logs found
 
 Expected behaviour: Any custom events written to writer within a nested workflow step should bubble up when the workflow is resumed.

@@ -1,0 +1,2406 @@
+[2025-12-04T13:07:56.362Z] {
+  "type": "start",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "id": "Fruit Agent"
+  }
+}
+[2025-12-04T13:07:58.479Z] {
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "type": "step-start",
+  "payload": {
+    "request": {
+      "body": {
+        "model": "claude-sonnet-4-5-20250929",
+        "max_tokens": 64000,
+        "temperature": 0,
+        "system": [
+          {
+            "type": "text",
+            "text": "You are a helpful assistant that helps users find fruits they like.\n\nWhen a user asks for fruit suggestions:\n1. Use the \"start-fruit-workflow\" tool to start suggesting fruits\n2. The tool will return a fruit suggestion - present it to the user and ask if they like it\n3. When the user responds, interpret their response to determine if they approved (true) or rejected (false) the fruit\n4. Use the \"resume-fruit-workflow\" tool with the runId and the approved boolean\n5. If approved is false, call \"start-fruit-workflow\" again to get a new fruit suggestion (this starts a new workflow run)\n6. If approved is true, congratulate them and end\n\nYou are responsible for interpreting the user's natural language response and converting it to a boolean. Consider responses like \"yes\", \"sure\", \"I like it\", \"sounds good\" as approval (true), and responses like \"no\", \"not really\", \"I don't like it\", \"try another\" as rejection (false)."
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "suggest a fruit"
+              }
+            ]
+          }
+        ],
+        "tools": [
+          {
+            "name": "startFruitWorkflow",
+            "description": "Start a fruit suggestion workflow that will suggest a fruit",
+            "input_schema": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "default": "recommend a fruit",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "name": "resumeFruitWorkflow",
+            "description": "Resume a suspended fruit suggestion workflow with whether the user approved the fruit",
+            "input_schema": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "type": "object",
+              "properties": {
+                "runId": {
+                  "description": "The workflow run ID to resume",
+                  "type": "string"
+                },
+                "suggestedFruit": {
+                  "description": "The fruit that was suggested and is being approved/rejected",
+                  "type": "string"
+                },
+                "approved": {
+                  "description": "Whether the user approved the suggested fruit",
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "runId",
+                "suggestedFruit",
+                "approved"
+              ],
+              "additionalProperties": false
+            }
+          }
+        ],
+        "tool_choice": {
+          "type": "auto"
+        },
+        "stream": true
+      }
+    },
+    "warnings": [],
+    "messageId": "c4a6d7f3-e0d7-47fa-a4b6-2560ca07685f"
+  }
+}
+[2025-12-04T13:07:58.482Z] {
+  "type": "text-start",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "id": "0"
+  }
+}
+[2025-12-04T13:07:58.483Z] {
+  "type": "text-delta",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "id": "0",
+    "text": "I'll help you fin"
+  }
+}
+[2025-12-04T13:07:58.554Z] {
+  "type": "text-delta",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "id": "0",
+    "text": "d a fruit you"
+  }
+}
+[2025-12-04T13:07:58.610Z] {
+  "type": "text-delta",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "id": "0",
+    "text": " like"
+  }
+}
+[2025-12-04T13:07:58.659Z] {
+  "type": "text-delta",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "id": "0",
+    "text": "! Let me start"
+  }
+}
+[2025-12-04T13:07:58.685Z] {
+  "type": "text-delta",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "id": "0",
+    "text": " by suggesting one"
+  }
+}
+[2025-12-04T13:07:58.879Z] {
+  "type": "text-delta",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "id": "0",
+    "text": " for you."
+  }
+}
+[2025-12-04T13:07:59.014Z] {
+  "type": "text-end",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "type": "text-end",
+    "id": "0"
+  }
+}
+[2025-12-04T13:07:59.016Z] {
+  "type": "tool-call-input-streaming-start",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+    "toolName": "startFruitWorkflow"
+  }
+}
+[2025-12-04T13:07:59.221Z] {
+  "type": "tool-call-delta",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "argsTextDelta": "{\"message",
+    "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+    "toolName": "startFruitWorkflow"
+  }
+}
+[2025-12-04T13:07:59.222Z] {
+  "type": "tool-call-delta",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "argsTextDelta": "\": \"recomm",
+    "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+    "toolName": "startFruitWorkflow"
+  }
+}
+[2025-12-04T13:07:59.223Z] {
+  "type": "tool-call-delta",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "argsTextDelta": "end",
+    "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+    "toolName": "startFruitWorkflow"
+  }
+}
+[2025-12-04T13:07:59.224Z] {
+  "type": "tool-call-delta",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "argsTextDelta": " a fruit\"}",
+    "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+    "toolName": "startFruitWorkflow"
+  }
+}
+[2025-12-04T13:07:59.224Z] {
+  "type": "tool-call-input-streaming-end",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR"
+  }
+}
+[2025-12-04T13:07:59.224Z] {
+  "type": "tool-call",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+    "toolName": "startFruitWorkflow",
+    "args": {
+      "message": "recommend a fruit"
+    }
+  }
+}
+[2025-12-04T13:07:59.233Z] {
+  "type": "workflow-start",
+  "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+  "from": "WORKFLOW",
+  "payload": {
+    "workflowId": "fruit-suggestion"
+  }
+}
+[2025-12-04T13:07:59.234Z] {
+  "type": "workflow-step-start",
+  "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+  "from": "WORKFLOW",
+  "payload": {
+    "stepName": "preprocess-fruit-request",
+    "id": "preprocess-fruit-request",
+    "stepCallId": "21b5ad89-470e-406e-9e5e-d6ea8e9cbcd1",
+    "payload": {},
+    "startedAt": 1764853679234,
+    "status": "running"
+  }
+}
+[2025-12-04T13:07:59.235Z] {
+  "type": "data-step-progress",
+  "data": {
+    "status": "preprocessing",
+    "message": "Preparing fruit suggestion..."
+  }
+}
+[2025-12-04T13:07:59.337Z] {
+  "type": "data-step-progress",
+  "data": {
+    "status": "preprocessed",
+    "message": "Ready to suggest fruits!"
+  }
+}
+[2025-12-04T13:07:59.338Z] {
+  "type": "workflow-step-result",
+  "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+  "from": "WORKFLOW",
+  "payload": {
+    "stepName": "preprocess-fruit-request",
+    "id": "preprocess-fruit-request",
+    "stepCallId": "21b5ad89-470e-406e-9e5e-d6ea8e9cbcd1",
+    "payload": {},
+    "startedAt": 1764853679234,
+    "status": "success",
+    "output": {},
+    "endedAt": 1764853679337
+  }
+}
+[2025-12-04T13:07:59.340Z] {
+  "type": "workflow-step-start",
+  "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+  "from": "WORKFLOW",
+  "payload": {
+    "stepName": "inner-fruit-confirmation",
+    "id": "inner-fruit-confirmation",
+    "stepCallId": "f170dfcb-ffc7-4459-b5c7-278d91ed6189",
+    "payload": {},
+    "startedAt": 1764853679340,
+    "status": "running"
+  }
+}
+[2025-12-04T13:07:59.342Z] {
+  "type": "workflow-step-start",
+  "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+  "from": "WORKFLOW",
+  "payload": {
+    "stepName": "inner-fruit-confirmation.confirm-and-refine",
+    "id": "inner-fruit-confirmation.confirm-and-refine",
+    "stepCallId": "1993fec8-7c7f-4c97-8abb-dd17b2949eee",
+    "payload": {},
+    "startedAt": 1764853679342,
+    "status": "running",
+    "metadata": {
+      "iterationCount": 1
+    }
+  }
+}
+[2025-12-04T13:07:59.344Z] {
+  "type": "workflow-step-output",
+  "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+  "from": "USER",
+  "payload": {
+    "output": {
+      "type": "data-step-progress",
+      "data": "generating-fruit"
+    },
+    "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+    "stepName": "inner-fruit-confirmation"
+  }
+}
+[2025-12-04T13:07:59.344Z] {
+  "type": "workflow-step-output",
+  "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+  "from": "USER",
+  "payload": {
+    "output": {
+      "type": "data-step-progress",
+      "data": {
+        "fruit": "Apple",
+        "status": "generated"
+      }
+    },
+    "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+    "stepName": "inner-fruit-confirmation"
+  }
+}
+[2025-12-04T13:07:59.345Z] {
+  "type": "workflow-step-output",
+  "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+  "from": "USER",
+  "payload": {
+    "output": {
+      "type": "data-step-suspended",
+      "data": {
+        "fruit": "Apple",
+        "status": "awaitng-confirmation"
+      }
+    },
+    "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+    "stepName": "inner-fruit-confirmation"
+  }
+}
+[2025-12-04T13:07:59.346Z] {
+  "type": "workflow-step-suspended",
+  "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+  "from": "WORKFLOW",
+  "payload": {
+    "stepName": "inner-fruit-confirmation.confirm-and-refine",
+    "id": "inner-fruit-confirmation.confirm-and-refine",
+    "stepCallId": "1993fec8-7c7f-4c97-8abb-dd17b2949eee",
+    "payload": {},
+    "startedAt": 1764853679342,
+    "status": "suspended",
+    "metadata": {
+      "iterationCount": 1
+    },
+    "suspendPayload": {
+      "suggestedFruit": "Apple"
+    },
+    "suspendOutput": {
+      "draftFruit": "Apple",
+      "approved": false
+    },
+    "suspendedAt": 1764853679345
+  }
+}
+[2025-12-04T13:07:59.347Z] {
+  "type": "workflow-step-suspended",
+  "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+  "from": "WORKFLOW",
+  "payload": {
+    "stepName": "inner-fruit-confirmation",
+    "id": "inner-fruit-confirmation",
+    "stepCallId": "f170dfcb-ffc7-4459-b5c7-278d91ed6189",
+    "payload": {},
+    "startedAt": 1764853679340,
+    "status": "suspended",
+    "suspendPayload": {
+      "suggestedFruit": "Apple",
+      "__workflow_meta": {
+        "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+        "path": [
+          "confirm-and-refine"
+        ]
+      }
+    },
+    "suspendedAt": 1764853679347
+  }
+}
+[2025-12-04T13:07:59.348Z] {
+  "type": "workflow-finish",
+  "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+  "from": "WORKFLOW",
+  "payload": {
+    "workflowStatus": "suspended",
+    "metadata": {},
+    "output": {
+      "usage": {
+        "inputTokens": 0,
+        "outputTokens": 0,
+        "totalTokens": 0,
+        "cachedInputTokens": 0,
+        "reasoningTokens": 0
+      }
+    }
+  }
+}
+[2025-12-04T13:07:59.350Z] {
+  "type": "tool-result",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "args": {
+      "message": "recommend a fruit"
+    },
+    "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+    "toolName": "startFruitWorkflow",
+    "result": {
+      "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+      "suggestedFruit": "Apple",
+      "status": "suspended"
+    }
+  }
+}
+[2025-12-04T13:07:59.352Z] {
+  "type": "step-finish",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "messageId": "c4a6d7f3-e0d7-47fa-a4b6-2560ca07685f",
+    "stepResult": {
+      "reason": "tool-calls",
+      "isContinued": true
+    },
+    "metadata": {
+      "providerMetadata": {
+        "anthropic": {
+          "usage": {
+            "input_tokens": 994,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 0
+            },
+            "output_tokens": 78,
+            "service_tier": "standard"
+          },
+          "cacheCreationInputTokens": 0,
+          "stopSequence": null,
+          "container": null
+        }
+      },
+      "id": "msg_01BmVovzEpNqxDLYERfsS2eL",
+      "modelId": "claude-sonnet-4-5-20250929",
+      "headers": {
+        "anthropic-organization-id": "39154cda-4553-4594-8cab-9239debc9a89",
+        "anthropic-ratelimit-input-tokens-limit": "450000",
+        "anthropic-ratelimit-input-tokens-remaining": "449000",
+        "anthropic-ratelimit-input-tokens-reset": "2025-12-04T13:07:56Z",
+        "anthropic-ratelimit-output-tokens-limit": "90000",
+        "anthropic-ratelimit-output-tokens-remaining": "90000",
+        "anthropic-ratelimit-output-tokens-reset": "2025-12-04T13:07:56Z",
+        "anthropic-ratelimit-requests-limit": "1000",
+        "anthropic-ratelimit-requests-remaining": "999",
+        "anthropic-ratelimit-requests-reset": "2025-12-04T13:07:56Z",
+        "anthropic-ratelimit-tokens-limit": "540000",
+        "anthropic-ratelimit-tokens-remaining": "539000",
+        "anthropic-ratelimit-tokens-reset": "2025-12-04T13:07:56Z",
+        "cache-control": "no-cache",
+        "cf-cache-status": "DYNAMIC",
+        "cf-ray": "9a8b8795f9bd2fe5-CNN",
+        "connection": "keep-alive",
+        "content-type": "text/event-stream; charset=utf-8",
+        "date": "Thu, 04 Dec 2025 13:07:58 GMT",
+        "request-id": "req_011CVmhVURY5ok6mhCqitWSm",
+        "retry-after": "4",
+        "server": "cloudflare",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "transfer-encoding": "chunked",
+        "x-envoy-upstream-service-time": "1768",
+        "x-robots-tag": "none"
+      },
+      "modelMetadata": {
+        "modelId": "claude-sonnet-4-5-20250929",
+        "modelVersion": "v2",
+        "modelProvider": "anthropic"
+      },
+      "request": {
+        "body": {
+          "model": "claude-sonnet-4-5-20250929",
+          "max_tokens": 64000,
+          "temperature": 0,
+          "system": [
+            {
+              "type": "text",
+              "text": "You are a helpful assistant that helps users find fruits they like.\n\nWhen a user asks for fruit suggestions:\n1. Use the \"start-fruit-workflow\" tool to start suggesting fruits\n2. The tool will return a fruit suggestion - present it to the user and ask if they like it\n3. When the user responds, interpret their response to determine if they approved (true) or rejected (false) the fruit\n4. Use the \"resume-fruit-workflow\" tool with the runId and the approved boolean\n5. If approved is false, call \"start-fruit-workflow\" again to get a new fruit suggestion (this starts a new workflow run)\n6. If approved is true, congratulate them and end\n\nYou are responsible for interpreting the user's natural language response and converting it to a boolean. Consider responses like \"yes\", \"sure\", \"I like it\", \"sounds good\" as approval (true), and responses like \"no\", \"not really\", \"I don't like it\", \"try another\" as rejection (false)."
+            }
+          ],
+          "messages": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "suggest a fruit"
+                }
+              ]
+            }
+          ],
+          "tools": [
+            {
+              "name": "startFruitWorkflow",
+              "description": "Start a fruit suggestion workflow that will suggest a fruit",
+              "input_schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "default": "recommend a fruit",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "message"
+                ],
+                "additionalProperties": false
+              }
+            },
+            {
+              "name": "resumeFruitWorkflow",
+              "description": "Resume a suspended fruit suggestion workflow with whether the user approved the fruit",
+              "input_schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "runId": {
+                    "description": "The workflow run ID to resume",
+                    "type": "string"
+                  },
+                  "suggestedFruit": {
+                    "description": "The fruit that was suggested and is being approved/rejected",
+                    "type": "string"
+                  },
+                  "approved": {
+                    "description": "Whether the user approved the suggested fruit",
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "runId",
+                  "suggestedFruit",
+                  "approved"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ],
+          "tool_choice": {
+            "type": "auto"
+          },
+          "stream": true
+        }
+      }
+    },
+    "output": {
+      "text": "I'll help you find a fruit you like! Let me start by suggesting one for you.",
+      "toolCalls": [
+        {
+          "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+          "toolName": "startFruitWorkflow",
+          "args": {
+            "message": "recommend a fruit"
+          }
+        }
+      ],
+      "usage": {
+        "inputTokens": 994,
+        "outputTokens": 78,
+        "totalTokens": 1072,
+        "cachedInputTokens": 0
+      },
+      "steps": [
+        {
+          "content": [],
+          "usage": {
+            "inputTokens": 994,
+            "outputTokens": 78,
+            "totalTokens": 1072,
+            "cachedInputTokens": 0
+          },
+          "warnings": [],
+          "request": {
+            "body": {
+              "model": "claude-sonnet-4-5-20250929",
+              "max_tokens": 64000,
+              "temperature": 0,
+              "system": [
+                {
+                  "type": "text",
+                  "text": "You are a helpful assistant that helps users find fruits they like.\n\nWhen a user asks for fruit suggestions:\n1. Use the \"start-fruit-workflow\" tool to start suggesting fruits\n2. The tool will return a fruit suggestion - present it to the user and ask if they like it\n3. When the user responds, interpret their response to determine if they approved (true) or rejected (false) the fruit\n4. Use the \"resume-fruit-workflow\" tool with the runId and the approved boolean\n5. If approved is false, call \"start-fruit-workflow\" again to get a new fruit suggestion (this starts a new workflow run)\n6. If approved is true, congratulate them and end\n\nYou are responsible for interpreting the user's natural language response and converting it to a boolean. Consider responses like \"yes\", \"sure\", \"I like it\", \"sounds good\" as approval (true), and responses like \"no\", \"not really\", \"I don't like it\", \"try another\" as rejection (false)."
+                }
+              ],
+              "messages": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "suggest a fruit"
+                    }
+                  ]
+                }
+              ],
+              "tools": [
+                {
+                  "name": "startFruitWorkflow",
+                  "description": "Start a fruit suggestion workflow that will suggest a fruit",
+                  "input_schema": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "default": "recommend a fruit",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                {
+                  "name": "resumeFruitWorkflow",
+                  "description": "Resume a suspended fruit suggestion workflow with whether the user approved the fruit",
+                  "input_schema": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "description": "The workflow run ID to resume",
+                        "type": "string"
+                      },
+                      "suggestedFruit": {
+                        "description": "The fruit that was suggested and is being approved/rejected",
+                        "type": "string"
+                      },
+                      "approved": {
+                        "description": "Whether the user approved the suggested fruit",
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "suggestedFruit",
+                      "approved"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "auto"
+              },
+              "stream": true
+            }
+          },
+          "response": {
+            "id": "msg_01BmVovzEpNqxDLYERfsS2eL",
+            "modelId": "claude-sonnet-4-5-20250929",
+            "headers": {
+              "anthropic-organization-id": "39154cda-4553-4594-8cab-9239debc9a89",
+              "anthropic-ratelimit-input-tokens-limit": "450000",
+              "anthropic-ratelimit-input-tokens-remaining": "449000",
+              "anthropic-ratelimit-input-tokens-reset": "2025-12-04T13:07:56Z",
+              "anthropic-ratelimit-output-tokens-limit": "90000",
+              "anthropic-ratelimit-output-tokens-remaining": "90000",
+              "anthropic-ratelimit-output-tokens-reset": "2025-12-04T13:07:56Z",
+              "anthropic-ratelimit-requests-limit": "1000",
+              "anthropic-ratelimit-requests-remaining": "999",
+              "anthropic-ratelimit-requests-reset": "2025-12-04T13:07:56Z",
+              "anthropic-ratelimit-tokens-limit": "540000",
+              "anthropic-ratelimit-tokens-remaining": "539000",
+              "anthropic-ratelimit-tokens-reset": "2025-12-04T13:07:56Z",
+              "cache-control": "no-cache",
+              "cf-cache-status": "DYNAMIC",
+              "cf-ray": "9a8b8795f9bd2fe5-CNN",
+              "connection": "keep-alive",
+              "content-type": "text/event-stream; charset=utf-8",
+              "date": "Thu, 04 Dec 2025 13:07:58 GMT",
+              "request-id": "req_011CVmhVURY5ok6mhCqitWSm",
+              "retry-after": "4",
+              "server": "cloudflare",
+              "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+              "transfer-encoding": "chunked",
+              "x-envoy-upstream-service-time": "1768",
+              "x-robots-tag": "none"
+            },
+            "messages": [
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "I'll help you find a fruit you like! Let me start by suggesting one for you."
+                  },
+                  {
+                    "type": "tool-call",
+                    "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+                    "toolName": "startFruitWorkflow",
+                    "input": {
+                      "message": "recommend a fruit"
+                    }
+                  }
+                ]
+              },
+              {
+                "role": "tool",
+                "content": []
+              }
+            ]
+          },
+          "providerMetadata": {
+            "anthropic": {
+              "usage": {
+                "input_tokens": 994,
+                "cache_creation_input_tokens": 0,
+                "cache_read_input_tokens": 0,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 0
+                },
+                "output_tokens": 78,
+                "service_tier": "standard"
+              },
+              "cacheCreationInputTokens": 0,
+              "stopSequence": null,
+              "container": null
+            }
+          }
+        }
+      ]
+    },
+    "messages": {
+      "all": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "suggest a fruit"
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "I'll help you find a fruit you like! Let me start by suggesting one for you."
+            },
+            {
+              "type": "tool-call",
+              "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+              "toolName": "startFruitWorkflow",
+              "input": {
+                "message": "recommend a fruit"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "content": [
+            {
+              "type": "tool-result",
+              "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+              "toolName": "startFruitWorkflow",
+              "output": {
+                "type": "json",
+                "value": {
+                  "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+                  "suggestedFruit": "Apple",
+                  "status": "suspended"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "user": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "suggest a fruit"
+            }
+          ]
+        }
+      ],
+      "nonUser": [
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "I'll help you find a fruit you like! Let me start by suggesting one for you."
+            },
+            {
+              "type": "tool-call",
+              "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+              "toolName": "startFruitWorkflow",
+              "input": {
+                "message": "recommend a fruit"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "content": [
+            {
+              "type": "tool-result",
+              "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+              "toolName": "startFruitWorkflow",
+              "output": {
+                "type": "json",
+                "value": {
+                  "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+                  "suggestedFruit": "Apple",
+                  "status": "suspended"
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+[2025-12-04T13:08:01.413Z] {
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "type": "step-start",
+  "payload": {
+    "request": {
+      "body": {
+        "model": "claude-sonnet-4-5-20250929",
+        "max_tokens": 64000,
+        "temperature": 0,
+        "system": [
+          {
+            "type": "text",
+            "text": "You are a helpful assistant that helps users find fruits they like.\n\nWhen a user asks for fruit suggestions:\n1. Use the \"start-fruit-workflow\" tool to start suggesting fruits\n2. The tool will return a fruit suggestion - present it to the user and ask if they like it\n3. When the user responds, interpret their response to determine if they approved (true) or rejected (false) the fruit\n4. Use the \"resume-fruit-workflow\" tool with the runId and the approved boolean\n5. If approved is false, call \"start-fruit-workflow\" again to get a new fruit suggestion (this starts a new workflow run)\n6. If approved is true, congratulate them and end\n\nYou are responsible for interpreting the user's natural language response and converting it to a boolean. Consider responses like \"yes\", \"sure\", \"I like it\", \"sounds good\" as approval (true), and responses like \"no\", \"not really\", \"I don't like it\", \"try another\" as rejection (false)."
+          }
+        ],
+        "messages": [
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "text",
+                "text": "suggest a fruit"
+              }
+            ]
+          },
+          {
+            "role": "assistant",
+            "content": [
+              {
+                "type": "text",
+                "text": "I'll help you find a fruit you like! Let me start by suggesting one for you."
+              },
+              {
+                "type": "tool_use",
+                "id": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+                "name": "startFruitWorkflow",
+                "input": {
+                  "message": "recommend a fruit"
+                }
+              }
+            ]
+          },
+          {
+            "role": "user",
+            "content": [
+              {
+                "type": "tool_result",
+                "tool_use_id": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+                "content": "{\"runId\":\"37276c6b-9415-4417-97c9-69e185a69818\",\"suggestedFruit\":\"Apple\",\"status\":\"suspended\"}"
+              }
+            ]
+          }
+        ],
+        "tools": [
+          {
+            "name": "startFruitWorkflow",
+            "description": "Start a fruit suggestion workflow that will suggest a fruit",
+            "input_schema": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "type": "object",
+              "properties": {
+                "message": {
+                  "default": "recommend a fruit",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "message"
+              ],
+              "additionalProperties": false
+            }
+          },
+          {
+            "name": "resumeFruitWorkflow",
+            "description": "Resume a suspended fruit suggestion workflow with whether the user approved the fruit",
+            "input_schema": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "type": "object",
+              "properties": {
+                "runId": {
+                  "description": "The workflow run ID to resume",
+                  "type": "string"
+                },
+                "suggestedFruit": {
+                  "description": "The fruit that was suggested and is being approved/rejected",
+                  "type": "string"
+                },
+                "approved": {
+                  "description": "Whether the user approved the suggested fruit",
+                  "type": "boolean"
+                }
+              },
+              "required": [
+                "runId",
+                "suggestedFruit",
+                "approved"
+              ],
+              "additionalProperties": false
+            }
+          }
+        ],
+        "tool_choice": {
+          "type": "auto"
+        },
+        "stream": true
+      }
+    },
+    "warnings": [],
+    "messageId": "c4a6d7f3-e0d7-47fa-a4b6-2560ca07685f"
+  }
+}
+[2025-12-04T13:08:01.416Z] {
+  "type": "text-start",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "id": "0"
+  }
+}
+[2025-12-04T13:08:01.417Z] {
+  "type": "text-delta",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "id": "0",
+    "text": "How"
+  }
+}
+[2025-12-04T13:08:01.617Z] {
+  "type": "text-delta",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "id": "0",
+    "text": " about"
+  }
+}
+[2025-12-04T13:08:01.633Z] {
+  "type": "text-delta",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "id": "0",
+    "text": " an"
+  }
+}
+[2025-12-04T13:08:01.638Z] {
+  "type": "text-delta",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "id": "0",
+    "text": " **"
+  }
+}
+[2025-12-04T13:08:01.769Z] {
+  "type": "text-delta",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "id": "0",
+    "text": "Apple**"
+  }
+}
+[2025-12-04T13:08:01.770Z] {
+  "type": "text-delta",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "id": "0",
+    "text": "?"
+  }
+}
+[2025-12-04T13:08:01.818Z] {
+  "type": "text-delta",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "id": "0",
+    "text": " Do"
+  }
+}
+[2025-12-04T13:08:02.124Z] {
+  "type": "text-delta",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "id": "0",
+    "text": " you like apples?"
+  }
+}
+[2025-12-04T13:08:02.124Z] {
+  "type": "text-end",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "type": "text-end",
+    "id": "0"
+  }
+}
+[2025-12-04T13:08:02.134Z] {
+  "type": "step-finish",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "messageId": "c4a6d7f3-e0d7-47fa-a4b6-2560ca07685f",
+    "stepResult": {
+      "reason": "stop",
+      "isContinued": false
+    },
+    "metadata": {
+      "providerMetadata": {
+        "anthropic": {
+          "usage": {
+            "input_tokens": 1123,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 0
+            },
+            "output_tokens": 16,
+            "service_tier": "standard"
+          },
+          "cacheCreationInputTokens": 0,
+          "stopSequence": null,
+          "container": null
+        }
+      },
+      "id": "msg_01FrmZoPc8DC6sWfKgjbznrV",
+      "modelId": "claude-sonnet-4-5-20250929",
+      "headers": {
+        "anthropic-organization-id": "39154cda-4553-4594-8cab-9239debc9a89",
+        "anthropic-ratelimit-input-tokens-limit": "450000",
+        "anthropic-ratelimit-input-tokens-remaining": "449000",
+        "anthropic-ratelimit-input-tokens-reset": "2025-12-04T13:07:59Z",
+        "anthropic-ratelimit-output-tokens-limit": "90000",
+        "anthropic-ratelimit-output-tokens-remaining": "90000",
+        "anthropic-ratelimit-output-tokens-reset": "2025-12-04T13:07:59Z",
+        "anthropic-ratelimit-requests-limit": "1000",
+        "anthropic-ratelimit-requests-remaining": "999",
+        "anthropic-ratelimit-requests-reset": "2025-12-04T13:07:59Z",
+        "anthropic-ratelimit-tokens-limit": "540000",
+        "anthropic-ratelimit-tokens-remaining": "539000",
+        "anthropic-ratelimit-tokens-reset": "2025-12-04T13:07:59Z",
+        "cache-control": "no-cache",
+        "cf-cache-status": "DYNAMIC",
+        "cf-ray": "9a8b87a8abfd2fe5-CNN",
+        "connection": "keep-alive",
+        "content-type": "text/event-stream; charset=utf-8",
+        "date": "Thu, 04 Dec 2025 13:08:01 GMT",
+        "request-id": "req_011CVmhVhCEu7FwqtQJK52fW",
+        "retry-after": "1",
+        "server": "cloudflare",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "transfer-encoding": "chunked",
+        "x-envoy-upstream-service-time": "1753",
+        "x-robots-tag": "none"
+      },
+      "modelMetadata": {
+        "modelId": "claude-sonnet-4-5-20250929",
+        "modelVersion": "v2",
+        "modelProvider": "anthropic"
+      },
+      "request": {
+        "body": {
+          "model": "claude-sonnet-4-5-20250929",
+          "max_tokens": 64000,
+          "temperature": 0,
+          "system": [
+            {
+              "type": "text",
+              "text": "You are a helpful assistant that helps users find fruits they like.\n\nWhen a user asks for fruit suggestions:\n1. Use the \"start-fruit-workflow\" tool to start suggesting fruits\n2. The tool will return a fruit suggestion - present it to the user and ask if they like it\n3. When the user responds, interpret their response to determine if they approved (true) or rejected (false) the fruit\n4. Use the \"resume-fruit-workflow\" tool with the runId and the approved boolean\n5. If approved is false, call \"start-fruit-workflow\" again to get a new fruit suggestion (this starts a new workflow run)\n6. If approved is true, congratulate them and end\n\nYou are responsible for interpreting the user's natural language response and converting it to a boolean. Consider responses like \"yes\", \"sure\", \"I like it\", \"sounds good\" as approval (true), and responses like \"no\", \"not really\", \"I don't like it\", \"try another\" as rejection (false)."
+            }
+          ],
+          "messages": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "suggest a fruit"
+                }
+              ]
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "I'll help you find a fruit you like! Let me start by suggesting one for you."
+                },
+                {
+                  "type": "tool_use",
+                  "id": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+                  "name": "startFruitWorkflow",
+                  "input": {
+                    "message": "recommend a fruit"
+                  }
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "tool_result",
+                  "tool_use_id": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+                  "content": "{\"runId\":\"37276c6b-9415-4417-97c9-69e185a69818\",\"suggestedFruit\":\"Apple\",\"status\":\"suspended\"}"
+                }
+              ]
+            }
+          ],
+          "tools": [
+            {
+              "name": "startFruitWorkflow",
+              "description": "Start a fruit suggestion workflow that will suggest a fruit",
+              "input_schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "default": "recommend a fruit",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "message"
+                ],
+                "additionalProperties": false
+              }
+            },
+            {
+              "name": "resumeFruitWorkflow",
+              "description": "Resume a suspended fruit suggestion workflow with whether the user approved the fruit",
+              "input_schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "runId": {
+                    "description": "The workflow run ID to resume",
+                    "type": "string"
+                  },
+                  "suggestedFruit": {
+                    "description": "The fruit that was suggested and is being approved/rejected",
+                    "type": "string"
+                  },
+                  "approved": {
+                    "description": "Whether the user approved the suggested fruit",
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "runId",
+                  "suggestedFruit",
+                  "approved"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ],
+          "tool_choice": {
+            "type": "auto"
+          },
+          "stream": true
+        }
+      }
+    },
+    "output": {
+      "text": "How about an **Apple**? Do you like apples?",
+      "toolCalls": [],
+      "usage": {
+        "inputTokens": 1123,
+        "outputTokens": 16,
+        "totalTokens": 1139,
+        "cachedInputTokens": 0
+      },
+      "steps": [
+        {
+          "content": [],
+          "usage": {
+            "inputTokens": 994,
+            "outputTokens": 78,
+            "totalTokens": 1072,
+            "cachedInputTokens": 0
+          },
+          "warnings": [],
+          "request": {
+            "body": {
+              "model": "claude-sonnet-4-5-20250929",
+              "max_tokens": 64000,
+              "temperature": 0,
+              "system": [
+                {
+                  "type": "text",
+                  "text": "You are a helpful assistant that helps users find fruits they like.\n\nWhen a user asks for fruit suggestions:\n1. Use the \"start-fruit-workflow\" tool to start suggesting fruits\n2. The tool will return a fruit suggestion - present it to the user and ask if they like it\n3. When the user responds, interpret their response to determine if they approved (true) or rejected (false) the fruit\n4. Use the \"resume-fruit-workflow\" tool with the runId and the approved boolean\n5. If approved is false, call \"start-fruit-workflow\" again to get a new fruit suggestion (this starts a new workflow run)\n6. If approved is true, congratulate them and end\n\nYou are responsible for interpreting the user's natural language response and converting it to a boolean. Consider responses like \"yes\", \"sure\", \"I like it\", \"sounds good\" as approval (true), and responses like \"no\", \"not really\", \"I don't like it\", \"try another\" as rejection (false)."
+                }
+              ],
+              "messages": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "suggest a fruit"
+                    }
+                  ]
+                }
+              ],
+              "tools": [
+                {
+                  "name": "startFruitWorkflow",
+                  "description": "Start a fruit suggestion workflow that will suggest a fruit",
+                  "input_schema": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "default": "recommend a fruit",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                {
+                  "name": "resumeFruitWorkflow",
+                  "description": "Resume a suspended fruit suggestion workflow with whether the user approved the fruit",
+                  "input_schema": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "description": "The workflow run ID to resume",
+                        "type": "string"
+                      },
+                      "suggestedFruit": {
+                        "description": "The fruit that was suggested and is being approved/rejected",
+                        "type": "string"
+                      },
+                      "approved": {
+                        "description": "Whether the user approved the suggested fruit",
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "suggestedFruit",
+                      "approved"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "auto"
+              },
+              "stream": true
+            }
+          },
+          "response": {
+            "id": "msg_01BmVovzEpNqxDLYERfsS2eL",
+            "modelId": "claude-sonnet-4-5-20250929",
+            "headers": {
+              "anthropic-organization-id": "39154cda-4553-4594-8cab-9239debc9a89",
+              "anthropic-ratelimit-input-tokens-limit": "450000",
+              "anthropic-ratelimit-input-tokens-remaining": "449000",
+              "anthropic-ratelimit-input-tokens-reset": "2025-12-04T13:07:56Z",
+              "anthropic-ratelimit-output-tokens-limit": "90000",
+              "anthropic-ratelimit-output-tokens-remaining": "90000",
+              "anthropic-ratelimit-output-tokens-reset": "2025-12-04T13:07:56Z",
+              "anthropic-ratelimit-requests-limit": "1000",
+              "anthropic-ratelimit-requests-remaining": "999",
+              "anthropic-ratelimit-requests-reset": "2025-12-04T13:07:56Z",
+              "anthropic-ratelimit-tokens-limit": "540000",
+              "anthropic-ratelimit-tokens-remaining": "539000",
+              "anthropic-ratelimit-tokens-reset": "2025-12-04T13:07:56Z",
+              "cache-control": "no-cache",
+              "cf-cache-status": "DYNAMIC",
+              "cf-ray": "9a8b8795f9bd2fe5-CNN",
+              "connection": "keep-alive",
+              "content-type": "text/event-stream; charset=utf-8",
+              "date": "Thu, 04 Dec 2025 13:07:58 GMT",
+              "request-id": "req_011CVmhVURY5ok6mhCqitWSm",
+              "retry-after": "4",
+              "server": "cloudflare",
+              "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+              "transfer-encoding": "chunked",
+              "x-envoy-upstream-service-time": "1768",
+              "x-robots-tag": "none"
+            },
+            "messages": [
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "I'll help you find a fruit you like! Let me start by suggesting one for you."
+                  },
+                  {
+                    "type": "tool-call",
+                    "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+                    "toolName": "startFruitWorkflow",
+                    "input": {
+                      "message": "recommend a fruit"
+                    }
+                  }
+                ]
+              },
+              {
+                "role": "tool",
+                "content": []
+              }
+            ]
+          },
+          "providerMetadata": {
+            "anthropic": {
+              "usage": {
+                "input_tokens": 994,
+                "cache_creation_input_tokens": 0,
+                "cache_read_input_tokens": 0,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 0
+                },
+                "output_tokens": 78,
+                "service_tier": "standard"
+              },
+              "cacheCreationInputTokens": 0,
+              "stopSequence": null,
+              "container": null
+            }
+          }
+        },
+        {
+          "content": [
+            {
+              "type": "tool-result",
+              "input": {},
+              "output": {
+                "type": "json",
+                "value": {
+                  "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+                  "suggestedFruit": "Apple",
+                  "status": "suspended"
+                }
+              },
+              "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+              "toolName": "startFruitWorkflow"
+            }
+          ],
+          "usage": {
+            "inputTokens": 1123,
+            "outputTokens": 16,
+            "totalTokens": 1139,
+            "cachedInputTokens": 0
+          },
+          "warnings": [],
+          "request": {
+            "body": {
+              "model": "claude-sonnet-4-5-20250929",
+              "max_tokens": 64000,
+              "temperature": 0,
+              "system": [
+                {
+                  "type": "text",
+                  "text": "You are a helpful assistant that helps users find fruits they like.\n\nWhen a user asks for fruit suggestions:\n1. Use the \"start-fruit-workflow\" tool to start suggesting fruits\n2. The tool will return a fruit suggestion - present it to the user and ask if they like it\n3. When the user responds, interpret their response to determine if they approved (true) or rejected (false) the fruit\n4. Use the \"resume-fruit-workflow\" tool with the runId and the approved boolean\n5. If approved is false, call \"start-fruit-workflow\" again to get a new fruit suggestion (this starts a new workflow run)\n6. If approved is true, congratulate them and end\n\nYou are responsible for interpreting the user's natural language response and converting it to a boolean. Consider responses like \"yes\", \"sure\", \"I like it\", \"sounds good\" as approval (true), and responses like \"no\", \"not really\", \"I don't like it\", \"try another\" as rejection (false)."
+                }
+              ],
+              "messages": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "suggest a fruit"
+                    }
+                  ]
+                },
+                {
+                  "role": "assistant",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "I'll help you find a fruit you like! Let me start by suggesting one for you."
+                    },
+                    {
+                      "type": "tool_use",
+                      "id": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+                      "name": "startFruitWorkflow",
+                      "input": {
+                        "message": "recommend a fruit"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "tool_result",
+                      "tool_use_id": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+                      "content": "{\"runId\":\"37276c6b-9415-4417-97c9-69e185a69818\",\"suggestedFruit\":\"Apple\",\"status\":\"suspended\"}"
+                    }
+                  ]
+                }
+              ],
+              "tools": [
+                {
+                  "name": "startFruitWorkflow",
+                  "description": "Start a fruit suggestion workflow that will suggest a fruit",
+                  "input_schema": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "default": "recommend a fruit",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                {
+                  "name": "resumeFruitWorkflow",
+                  "description": "Resume a suspended fruit suggestion workflow with whether the user approved the fruit",
+                  "input_schema": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "description": "The workflow run ID to resume",
+                        "type": "string"
+                      },
+                      "suggestedFruit": {
+                        "description": "The fruit that was suggested and is being approved/rejected",
+                        "type": "string"
+                      },
+                      "approved": {
+                        "description": "Whether the user approved the suggested fruit",
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "suggestedFruit",
+                      "approved"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "auto"
+              },
+              "stream": true
+            }
+          },
+          "response": {
+            "id": "msg_01FrmZoPc8DC6sWfKgjbznrV",
+            "modelId": "claude-sonnet-4-5-20250929",
+            "headers": {
+              "anthropic-organization-id": "39154cda-4553-4594-8cab-9239debc9a89",
+              "anthropic-ratelimit-input-tokens-limit": "450000",
+              "anthropic-ratelimit-input-tokens-remaining": "449000",
+              "anthropic-ratelimit-input-tokens-reset": "2025-12-04T13:07:59Z",
+              "anthropic-ratelimit-output-tokens-limit": "90000",
+              "anthropic-ratelimit-output-tokens-remaining": "90000",
+              "anthropic-ratelimit-output-tokens-reset": "2025-12-04T13:07:59Z",
+              "anthropic-ratelimit-requests-limit": "1000",
+              "anthropic-ratelimit-requests-remaining": "999",
+              "anthropic-ratelimit-requests-reset": "2025-12-04T13:07:59Z",
+              "anthropic-ratelimit-tokens-limit": "540000",
+              "anthropic-ratelimit-tokens-remaining": "539000",
+              "anthropic-ratelimit-tokens-reset": "2025-12-04T13:07:59Z",
+              "cache-control": "no-cache",
+              "cf-cache-status": "DYNAMIC",
+              "cf-ray": "9a8b87a8abfd2fe5-CNN",
+              "connection": "keep-alive",
+              "content-type": "text/event-stream; charset=utf-8",
+              "date": "Thu, 04 Dec 2025 13:08:01 GMT",
+              "request-id": "req_011CVmhVhCEu7FwqtQJK52fW",
+              "retry-after": "1",
+              "server": "cloudflare",
+              "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+              "transfer-encoding": "chunked",
+              "x-envoy-upstream-service-time": "1753",
+              "x-robots-tag": "none"
+            },
+            "messages": [
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "I'll help you find a fruit you like! Let me start by suggesting one for you."
+                  },
+                  {
+                    "type": "tool-call",
+                    "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+                    "toolName": "startFruitWorkflow",
+                    "input": {
+                      "message": "recommend a fruit"
+                    }
+                  }
+                ]
+              },
+              {
+                "role": "tool",
+                "content": [
+                  {
+                    "type": "tool-result",
+                    "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+                    "toolName": "startFruitWorkflow",
+                    "output": {
+                      "type": "json",
+                      "value": {
+                        "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+                        "suggestedFruit": "Apple",
+                        "status": "suspended"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "How about an **Apple**? Do you like apples?"
+                  }
+                ]
+              }
+            ]
+          },
+          "providerMetadata": {
+            "anthropic": {
+              "usage": {
+                "input_tokens": 1123,
+                "cache_creation_input_tokens": 0,
+                "cache_read_input_tokens": 0,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 0
+                },
+                "output_tokens": 16,
+                "service_tier": "standard"
+              },
+              "cacheCreationInputTokens": 0,
+              "stopSequence": null,
+              "container": null
+            }
+          }
+        }
+      ]
+    },
+    "messages": {
+      "all": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "suggest a fruit"
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "I'll help you find a fruit you like! Let me start by suggesting one for you."
+            },
+            {
+              "type": "tool-call",
+              "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+              "toolName": "startFruitWorkflow",
+              "input": {
+                "message": "recommend a fruit"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "content": [
+            {
+              "type": "tool-result",
+              "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+              "toolName": "startFruitWorkflow",
+              "output": {
+                "type": "json",
+                "value": {
+                  "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+                  "suggestedFruit": "Apple",
+                  "status": "suspended"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "How about an **Apple**? Do you like apples?"
+            }
+          ]
+        }
+      ],
+      "user": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "suggest a fruit"
+            }
+          ]
+        }
+      ],
+      "nonUser": [
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "I'll help you find a fruit you like! Let me start by suggesting one for you."
+            },
+            {
+              "type": "tool-call",
+              "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+              "toolName": "startFruitWorkflow",
+              "input": {
+                "message": "recommend a fruit"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "content": [
+            {
+              "type": "tool-result",
+              "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+              "toolName": "startFruitWorkflow",
+              "output": {
+                "type": "json",
+                "value": {
+                  "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+                  "suggestedFruit": "Apple",
+                  "status": "suspended"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": "How about an **Apple**? Do you like apples?"
+        }
+      ]
+    }
+  }
+}
+[2025-12-04T13:08:02.138Z] {
+  "type": "finish",
+  "runId": "6d5d4c71-c750-48c8-8d36-d0f487d8a1a6",
+  "from": "AGENT",
+  "payload": {
+    "messageId": "c4a6d7f3-e0d7-47fa-a4b6-2560ca07685f",
+    "stepResult": {
+      "reason": "stop",
+      "isContinued": false
+    },
+    "metadata": {
+      "providerMetadata": {
+        "anthropic": {
+          "usage": {
+            "input_tokens": 1123,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+            "cache_creation": {
+              "ephemeral_5m_input_tokens": 0,
+              "ephemeral_1h_input_tokens": 0
+            },
+            "output_tokens": 16,
+            "service_tier": "standard"
+          },
+          "cacheCreationInputTokens": 0,
+          "stopSequence": null,
+          "container": null
+        }
+      },
+      "id": "msg_01FrmZoPc8DC6sWfKgjbznrV",
+      "modelId": "claude-sonnet-4-5-20250929",
+      "headers": {
+        "anthropic-organization-id": "39154cda-4553-4594-8cab-9239debc9a89",
+        "anthropic-ratelimit-input-tokens-limit": "450000",
+        "anthropic-ratelimit-input-tokens-remaining": "449000",
+        "anthropic-ratelimit-input-tokens-reset": "2025-12-04T13:07:59Z",
+        "anthropic-ratelimit-output-tokens-limit": "90000",
+        "anthropic-ratelimit-output-tokens-remaining": "90000",
+        "anthropic-ratelimit-output-tokens-reset": "2025-12-04T13:07:59Z",
+        "anthropic-ratelimit-requests-limit": "1000",
+        "anthropic-ratelimit-requests-remaining": "999",
+        "anthropic-ratelimit-requests-reset": "2025-12-04T13:07:59Z",
+        "anthropic-ratelimit-tokens-limit": "540000",
+        "anthropic-ratelimit-tokens-remaining": "539000",
+        "anthropic-ratelimit-tokens-reset": "2025-12-04T13:07:59Z",
+        "cache-control": "no-cache",
+        "cf-cache-status": "DYNAMIC",
+        "cf-ray": "9a8b87a8abfd2fe5-CNN",
+        "connection": "keep-alive",
+        "content-type": "text/event-stream; charset=utf-8",
+        "date": "Thu, 04 Dec 2025 13:08:01 GMT",
+        "request-id": "req_011CVmhVhCEu7FwqtQJK52fW",
+        "retry-after": "1",
+        "server": "cloudflare",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "transfer-encoding": "chunked",
+        "x-envoy-upstream-service-time": "1753",
+        "x-robots-tag": "none"
+      },
+      "modelMetadata": {
+        "modelId": "claude-sonnet-4-5-20250929",
+        "modelVersion": "v2",
+        "modelProvider": "anthropic"
+      },
+      "request": {
+        "body": {
+          "model": "claude-sonnet-4-5-20250929",
+          "max_tokens": 64000,
+          "temperature": 0,
+          "system": [
+            {
+              "type": "text",
+              "text": "You are a helpful assistant that helps users find fruits they like.\n\nWhen a user asks for fruit suggestions:\n1. Use the \"start-fruit-workflow\" tool to start suggesting fruits\n2. The tool will return a fruit suggestion - present it to the user and ask if they like it\n3. When the user responds, interpret their response to determine if they approved (true) or rejected (false) the fruit\n4. Use the \"resume-fruit-workflow\" tool with the runId and the approved boolean\n5. If approved is false, call \"start-fruit-workflow\" again to get a new fruit suggestion (this starts a new workflow run)\n6. If approved is true, congratulate them and end\n\nYou are responsible for interpreting the user's natural language response and converting it to a boolean. Consider responses like \"yes\", \"sure\", \"I like it\", \"sounds good\" as approval (true), and responses like \"no\", \"not really\", \"I don't like it\", \"try another\" as rejection (false)."
+            }
+          ],
+          "messages": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "suggest a fruit"
+                }
+              ]
+            },
+            {
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "I'll help you find a fruit you like! Let me start by suggesting one for you."
+                },
+                {
+                  "type": "tool_use",
+                  "id": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+                  "name": "startFruitWorkflow",
+                  "input": {
+                    "message": "recommend a fruit"
+                  }
+                }
+              ]
+            },
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "tool_result",
+                  "tool_use_id": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+                  "content": "{\"runId\":\"37276c6b-9415-4417-97c9-69e185a69818\",\"suggestedFruit\":\"Apple\",\"status\":\"suspended\"}"
+                }
+              ]
+            }
+          ],
+          "tools": [
+            {
+              "name": "startFruitWorkflow",
+              "description": "Start a fruit suggestion workflow that will suggest a fruit",
+              "input_schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "default": "recommend a fruit",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "message"
+                ],
+                "additionalProperties": false
+              }
+            },
+            {
+              "name": "resumeFruitWorkflow",
+              "description": "Resume a suspended fruit suggestion workflow with whether the user approved the fruit",
+              "input_schema": {
+                "$schema": "https://json-schema.org/draft/2020-12/schema",
+                "type": "object",
+                "properties": {
+                  "runId": {
+                    "description": "The workflow run ID to resume",
+                    "type": "string"
+                  },
+                  "suggestedFruit": {
+                    "description": "The fruit that was suggested and is being approved/rejected",
+                    "type": "string"
+                  },
+                  "approved": {
+                    "description": "Whether the user approved the suggested fruit",
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "runId",
+                  "suggestedFruit",
+                  "approved"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ],
+          "tool_choice": {
+            "type": "auto"
+          },
+          "stream": true
+        }
+      }
+    },
+    "output": {
+      "text": "How about an **Apple**? Do you like apples?",
+      "toolCalls": [],
+      "usage": {
+        "inputTokens": 2117,
+        "outputTokens": 94,
+        "totalTokens": 2211,
+        "cachedInputTokens": 0
+      },
+      "steps": [
+        {
+          "content": [],
+          "usage": {
+            "inputTokens": 994,
+            "outputTokens": 78,
+            "totalTokens": 1072,
+            "cachedInputTokens": 0
+          },
+          "warnings": [],
+          "request": {
+            "body": {
+              "model": "claude-sonnet-4-5-20250929",
+              "max_tokens": 64000,
+              "temperature": 0,
+              "system": [
+                {
+                  "type": "text",
+                  "text": "You are a helpful assistant that helps users find fruits they like.\n\nWhen a user asks for fruit suggestions:\n1. Use the \"start-fruit-workflow\" tool to start suggesting fruits\n2. The tool will return a fruit suggestion - present it to the user and ask if they like it\n3. When the user responds, interpret their response to determine if they approved (true) or rejected (false) the fruit\n4. Use the \"resume-fruit-workflow\" tool with the runId and the approved boolean\n5. If approved is false, call \"start-fruit-workflow\" again to get a new fruit suggestion (this starts a new workflow run)\n6. If approved is true, congratulate them and end\n\nYou are responsible for interpreting the user's natural language response and converting it to a boolean. Consider responses like \"yes\", \"sure\", \"I like it\", \"sounds good\" as approval (true), and responses like \"no\", \"not really\", \"I don't like it\", \"try another\" as rejection (false)."
+                }
+              ],
+              "messages": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "suggest a fruit"
+                    }
+                  ]
+                }
+              ],
+              "tools": [
+                {
+                  "name": "startFruitWorkflow",
+                  "description": "Start a fruit suggestion workflow that will suggest a fruit",
+                  "input_schema": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "default": "recommend a fruit",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                {
+                  "name": "resumeFruitWorkflow",
+                  "description": "Resume a suspended fruit suggestion workflow with whether the user approved the fruit",
+                  "input_schema": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "description": "The workflow run ID to resume",
+                        "type": "string"
+                      },
+                      "suggestedFruit": {
+                        "description": "The fruit that was suggested and is being approved/rejected",
+                        "type": "string"
+                      },
+                      "approved": {
+                        "description": "Whether the user approved the suggested fruit",
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "suggestedFruit",
+                      "approved"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "auto"
+              },
+              "stream": true
+            }
+          },
+          "response": {
+            "id": "msg_01BmVovzEpNqxDLYERfsS2eL",
+            "modelId": "claude-sonnet-4-5-20250929",
+            "headers": {
+              "anthropic-organization-id": "39154cda-4553-4594-8cab-9239debc9a89",
+              "anthropic-ratelimit-input-tokens-limit": "450000",
+              "anthropic-ratelimit-input-tokens-remaining": "449000",
+              "anthropic-ratelimit-input-tokens-reset": "2025-12-04T13:07:56Z",
+              "anthropic-ratelimit-output-tokens-limit": "90000",
+              "anthropic-ratelimit-output-tokens-remaining": "90000",
+              "anthropic-ratelimit-output-tokens-reset": "2025-12-04T13:07:56Z",
+              "anthropic-ratelimit-requests-limit": "1000",
+              "anthropic-ratelimit-requests-remaining": "999",
+              "anthropic-ratelimit-requests-reset": "2025-12-04T13:07:56Z",
+              "anthropic-ratelimit-tokens-limit": "540000",
+              "anthropic-ratelimit-tokens-remaining": "539000",
+              "anthropic-ratelimit-tokens-reset": "2025-12-04T13:07:56Z",
+              "cache-control": "no-cache",
+              "cf-cache-status": "DYNAMIC",
+              "cf-ray": "9a8b8795f9bd2fe5-CNN",
+              "connection": "keep-alive",
+              "content-type": "text/event-stream; charset=utf-8",
+              "date": "Thu, 04 Dec 2025 13:07:58 GMT",
+              "request-id": "req_011CVmhVURY5ok6mhCqitWSm",
+              "retry-after": "4",
+              "server": "cloudflare",
+              "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+              "transfer-encoding": "chunked",
+              "x-envoy-upstream-service-time": "1768",
+              "x-robots-tag": "none"
+            },
+            "messages": [
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "I'll help you find a fruit you like! Let me start by suggesting one for you."
+                  },
+                  {
+                    "type": "tool-call",
+                    "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+                    "toolName": "startFruitWorkflow",
+                    "input": {
+                      "message": "recommend a fruit"
+                    }
+                  }
+                ]
+              },
+              {
+                "role": "tool",
+                "content": []
+              }
+            ]
+          },
+          "providerMetadata": {
+            "anthropic": {
+              "usage": {
+                "input_tokens": 994,
+                "cache_creation_input_tokens": 0,
+                "cache_read_input_tokens": 0,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 0
+                },
+                "output_tokens": 78,
+                "service_tier": "standard"
+              },
+              "cacheCreationInputTokens": 0,
+              "stopSequence": null,
+              "container": null
+            }
+          }
+        },
+        {
+          "content": [
+            {
+              "type": "tool-result",
+              "input": {},
+              "output": {
+                "type": "json",
+                "value": {
+                  "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+                  "suggestedFruit": "Apple",
+                  "status": "suspended"
+                }
+              },
+              "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+              "toolName": "startFruitWorkflow"
+            }
+          ],
+          "usage": {
+            "inputTokens": 1123,
+            "outputTokens": 16,
+            "totalTokens": 1139,
+            "cachedInputTokens": 0
+          },
+          "warnings": [],
+          "request": {
+            "body": {
+              "model": "claude-sonnet-4-5-20250929",
+              "max_tokens": 64000,
+              "temperature": 0,
+              "system": [
+                {
+                  "type": "text",
+                  "text": "You are a helpful assistant that helps users find fruits they like.\n\nWhen a user asks for fruit suggestions:\n1. Use the \"start-fruit-workflow\" tool to start suggesting fruits\n2. The tool will return a fruit suggestion - present it to the user and ask if they like it\n3. When the user responds, interpret their response to determine if they approved (true) or rejected (false) the fruit\n4. Use the \"resume-fruit-workflow\" tool with the runId and the approved boolean\n5. If approved is false, call \"start-fruit-workflow\" again to get a new fruit suggestion (this starts a new workflow run)\n6. If approved is true, congratulate them and end\n\nYou are responsible for interpreting the user's natural language response and converting it to a boolean. Consider responses like \"yes\", \"sure\", \"I like it\", \"sounds good\" as approval (true), and responses like \"no\", \"not really\", \"I don't like it\", \"try another\" as rejection (false)."
+                }
+              ],
+              "messages": [
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "suggest a fruit"
+                    }
+                  ]
+                },
+                {
+                  "role": "assistant",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "I'll help you find a fruit you like! Let me start by suggesting one for you."
+                    },
+                    {
+                      "type": "tool_use",
+                      "id": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+                      "name": "startFruitWorkflow",
+                      "input": {
+                        "message": "recommend a fruit"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "role": "user",
+                  "content": [
+                    {
+                      "type": "tool_result",
+                      "tool_use_id": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+                      "content": "{\"runId\":\"37276c6b-9415-4417-97c9-69e185a69818\",\"suggestedFruit\":\"Apple\",\"status\":\"suspended\"}"
+                    }
+                  ]
+                }
+              ],
+              "tools": [
+                {
+                  "name": "startFruitWorkflow",
+                  "description": "Start a fruit suggestion workflow that will suggest a fruit",
+                  "input_schema": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "default": "recommend a fruit",
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                {
+                  "name": "resumeFruitWorkflow",
+                  "description": "Resume a suspended fruit suggestion workflow with whether the user approved the fruit",
+                  "input_schema": {
+                    "$schema": "https://json-schema.org/draft/2020-12/schema",
+                    "type": "object",
+                    "properties": {
+                      "runId": {
+                        "description": "The workflow run ID to resume",
+                        "type": "string"
+                      },
+                      "suggestedFruit": {
+                        "description": "The fruit that was suggested and is being approved/rejected",
+                        "type": "string"
+                      },
+                      "approved": {
+                        "description": "Whether the user approved the suggested fruit",
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "runId",
+                      "suggestedFruit",
+                      "approved"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              ],
+              "tool_choice": {
+                "type": "auto"
+              },
+              "stream": true
+            }
+          },
+          "response": {
+            "id": "msg_01FrmZoPc8DC6sWfKgjbznrV",
+            "modelId": "claude-sonnet-4-5-20250929",
+            "headers": {
+              "anthropic-organization-id": "39154cda-4553-4594-8cab-9239debc9a89",
+              "anthropic-ratelimit-input-tokens-limit": "450000",
+              "anthropic-ratelimit-input-tokens-remaining": "449000",
+              "anthropic-ratelimit-input-tokens-reset": "2025-12-04T13:07:59Z",
+              "anthropic-ratelimit-output-tokens-limit": "90000",
+              "anthropic-ratelimit-output-tokens-remaining": "90000",
+              "anthropic-ratelimit-output-tokens-reset": "2025-12-04T13:07:59Z",
+              "anthropic-ratelimit-requests-limit": "1000",
+              "anthropic-ratelimit-requests-remaining": "999",
+              "anthropic-ratelimit-requests-reset": "2025-12-04T13:07:59Z",
+              "anthropic-ratelimit-tokens-limit": "540000",
+              "anthropic-ratelimit-tokens-remaining": "539000",
+              "anthropic-ratelimit-tokens-reset": "2025-12-04T13:07:59Z",
+              "cache-control": "no-cache",
+              "cf-cache-status": "DYNAMIC",
+              "cf-ray": "9a8b87a8abfd2fe5-CNN",
+              "connection": "keep-alive",
+              "content-type": "text/event-stream; charset=utf-8",
+              "date": "Thu, 04 Dec 2025 13:08:01 GMT",
+              "request-id": "req_011CVmhVhCEu7FwqtQJK52fW",
+              "retry-after": "1",
+              "server": "cloudflare",
+              "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+              "transfer-encoding": "chunked",
+              "x-envoy-upstream-service-time": "1753",
+              "x-robots-tag": "none"
+            },
+            "messages": [
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "I'll help you find a fruit you like! Let me start by suggesting one for you."
+                  },
+                  {
+                    "type": "tool-call",
+                    "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+                    "toolName": "startFruitWorkflow",
+                    "input": {
+                      "message": "recommend a fruit"
+                    }
+                  }
+                ]
+              },
+              {
+                "role": "tool",
+                "content": [
+                  {
+                    "type": "tool-result",
+                    "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+                    "toolName": "startFruitWorkflow",
+                    "output": {
+                      "type": "json",
+                      "value": {
+                        "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+                        "suggestedFruit": "Apple",
+                        "status": "suspended"
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "role": "assistant",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "How about an **Apple**? Do you like apples?"
+                  }
+                ]
+              }
+            ]
+          },
+          "providerMetadata": {
+            "anthropic": {
+              "usage": {
+                "input_tokens": 1123,
+                "cache_creation_input_tokens": 0,
+                "cache_read_input_tokens": 0,
+                "cache_creation": {
+                  "ephemeral_5m_input_tokens": 0,
+                  "ephemeral_1h_input_tokens": 0
+                },
+                "output_tokens": 16,
+                "service_tier": "standard"
+              },
+              "cacheCreationInputTokens": 0,
+              "stopSequence": null,
+              "container": null
+            }
+          }
+        }
+      ]
+    },
+    "messages": {
+      "all": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "suggest a fruit"
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "I'll help you find a fruit you like! Let me start by suggesting one for you."
+            },
+            {
+              "type": "tool-call",
+              "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+              "toolName": "startFruitWorkflow",
+              "input": {
+                "message": "recommend a fruit"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "content": [
+            {
+              "type": "tool-result",
+              "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+              "toolName": "startFruitWorkflow",
+              "output": {
+                "type": "json",
+                "value": {
+                  "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+                  "suggestedFruit": "Apple",
+                  "status": "suspended"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "How about an **Apple**? Do you like apples?"
+            }
+          ]
+        }
+      ],
+      "user": [
+        {
+          "role": "user",
+          "content": [
+            {
+              "type": "text",
+              "text": "suggest a fruit"
+            }
+          ]
+        }
+      ],
+      "nonUser": [
+        {
+          "role": "assistant",
+          "content": [
+            {
+              "type": "text",
+              "text": "I'll help you find a fruit you like! Let me start by suggesting one for you."
+            },
+            {
+              "type": "tool-call",
+              "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+              "toolName": "startFruitWorkflow",
+              "input": {
+                "message": "recommend a fruit"
+              }
+            }
+          ]
+        },
+        {
+          "role": "tool",
+          "content": [
+            {
+              "type": "tool-result",
+              "toolCallId": "toolu_01HmFtdfGmnb8j1S5wrTPdHR",
+              "toolName": "startFruitWorkflow",
+              "output": {
+                "type": "json",
+                "value": {
+                  "runId": "37276c6b-9415-4417-97c9-69e185a69818",
+                  "suggestedFruit": "Apple",
+                  "status": "suspended"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "role": "assistant",
+          "content": "How about an **Apple**? Do you like apples?"
+        }
+      ]
+    }
+  }
+}
